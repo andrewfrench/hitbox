@@ -28,3 +28,17 @@ Hitbox reads from a required `config.json` file at runtime.  The required fields
 - `geoip_url_format`: A `fmt.Sprintf()`-able format string denoting the URL to request GeoIP information from via GET request.  By default, Hitbox uses [freegeoip.net](http://freegeoip.net). Currently, GeoIP return values must be in JSON format with `city` (optional), `region` (optional), and `country` (required) fields.  Example value: `"geoip_url_format": "http://freegeoip.com/json/%s"`
 - `ignore_referrer_domains`: If this field is left blank, all of your site's internal links will register as being reffered from the same domain. To reduce clutter, it's recommended that you include your site's domain in this array, along with any other referral domains that shouldn't be shown. Example value: `"ignore_referrer_domains": ["knik.co", "facebook.com"]`
 - `port`: The port on which Hitbox should listen for GET requests. Example value: `"port": ":8080"`
+
+## Generating a Message
+Hitbox expects a GET request with two parameters: `p` (the client's current page) and `r` (the client's referrer) to `<hitbox_url>/ping`.  The following Javascript can be added to an existing website to generate a GET request:
+
+```
+<script>
+    var xmlHttp = new XMLHttpRequest();
+    var page = window.location.pathname;
+    var referrer = document.referrer;
+    var url = "<YOUR_HITBOX_URL>"
+	xmlHttp.open("GET", url + "/ping?p=" + page + "&r=" + referrer, true);
+	xmlHttp.send();
+</script>
+```
